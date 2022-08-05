@@ -1,46 +1,44 @@
 package volatile_;
 
 public class Main {
-    volatile int a;
-    int b;
+
+    private static volatile boolean running = true;
 
     public static void main(String[] args) {
-        Main main = new Main();
-
-
-      Thread thread1 = new Thread(new Runnable() {
-          @Override
-          public void run() {
-              for (int i = 0;i < 10000;i++){
-                  main.a++;
-                  main.b++;
-
-              }
-          }
-      });
-
-        Thread thread2 = new Thread(new Runnable() {
+        Thread thread3 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0;i < 10000;i++){
-                    main.a++;
-                    main.b++;
-
+                try {
+                    Thread.sleep(5000);
+                    running = false;
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
 
-        thread1.start();
+        Thread thread2 = new Thread(new Runnable() {
+            int i = 1;
+            @Override
+            public void run() {
+                while (running){
+                    System.out.println(i++);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         thread2.start();
+        thread3.start();
         try {
-            thread1.join();
             thread2.join();
-            System.out.println("a = " + main.a);
-            System.out.println("b = " +main.b);
+            thread3.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 }
