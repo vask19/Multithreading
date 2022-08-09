@@ -16,20 +16,14 @@ public class Main {
 
 
 class Action extends RecursiveAction{
-
-
     private int value;
-
-
     public Action(int value) {
         this.value = value;
-    }
 
+    }
     @Override
     protected void compute() {
         System.out.println("thread id: " + Thread.currentThread().getId() + ".....value = " + value);
-        System.out.println();
-
         if (value <= 4){
             try {
                 Thread.sleep(3000);
@@ -37,10 +31,7 @@ class Action extends RecursiveAction{
                 e.printStackTrace();
             }
             System.out.println();
-
-
         }
-
         else {
             Action action1 = new Action(value/2);
             Action action2 = new Action(value/2);
